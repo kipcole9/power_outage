@@ -7,7 +7,7 @@ defmodule PowerOutage.Worker do
   require Logger
   alias PowerOutage.Mail
 
-  @retrieval_interval_in_minutes 0.5
+  @retrieval_interval_in_minutes 3
   @retrieve_every trunc(@retrieval_interval_in_minutes * 60_000)
   @send_to System.get_env("POWER_OUTAGE_SEND_TO")
 
@@ -24,7 +24,7 @@ defmodule PowerOutage.Worker do
 
   def handle_info(:check_power_status, state) do
     {:ok, source, percent} = PowerOutage.Status.power_status
-    if source != state do
+    if source != state or percent <= 10 do
       notify(state, source, percent)
     end
 
