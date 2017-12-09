@@ -5,9 +5,11 @@ defmodule PowerOutage.Worker do
 
   use GenServer
   require Logger
+  alias PowerOutage.Mail
 
   @retrieval_interval_in_minutes 0.5
   @retrieve_every trunc(@retrieval_interval_in_minutes * 60_000)
+  @send_to System.get_env("POWER_OUTAGE_SEND_TO")
 
   def start_link(name) do
     GenServer.start_link(__MODULE__, [], name: name)
@@ -34,7 +36,15 @@ defmodule PowerOutage.Worker do
   end
 
   defp notify(from, to, percent) do
-    Logger.warn "Power changed from #{inspect from} to #{inspect to}. Battery is at #{percent}%"
+    message = "Power changed from #{inspect from} to #{inspect to}. Battery is at #{percent}%"
+    Logger.warn message
+
+    case to do
+      :battery ->
+        Mail.send(@send_to, "Refuge_Power_Outage", message)
+      :ac_power ->
+        Mail.send(@send_to, "Refuge_Power_Restored", message)
+    end
   end
 
 end
