@@ -21,7 +21,10 @@ defmodule PowerOutage do
   end
 
   def main(args \\ []) do
-    # Nothing to do since we have already started our
-    # supervision tree at this point
+    Process.flag(:trap_exit, true)
+
+    receive do
+      {:EXIT, from, reason} -> main()
+    end
   end
 end
