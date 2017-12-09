@@ -9,7 +9,7 @@ defmodule PowerOutage do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    Logger.info "Starting power outage logging"
+    Logger.info "Starting power status logging"
 
     {:ok, source, percent} = PowerOutage.Status.power_status
     Logger.info "Power source is #{inspect source}. Battery is at #{percent}%"

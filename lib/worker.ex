@@ -18,7 +18,7 @@ defmodule PowerOutage.Worker do
   def init([]) do
     schedule_work()
     {:ok, source, _percent} = PowerOutage.Status.power_status
-    Mail.send(@send_to, "Refuge_Power_Startup", "Source is #{inspect source}")
+    Mail.send(@send_to, "Refuge Power Monitoring Startup", "Source is #{inspect source}")
     {:ok, source}
   end
 
