@@ -20,11 +20,11 @@ defmodule PowerOutage do
     Supervisor.start_link(children, opts)
   end
 
-  def main(args \\ []) do
+  def main(_args \\ []) do
     Process.flag(:trap_exit, true)
 
     receive do
-      {:EXIT, from, reason} -> main()
+      {:EXIT, _from, _reason} -> main()
     end
   end
 end
