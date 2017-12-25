@@ -9,7 +9,9 @@ defmodule PowerOutage do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    Logger.info "Starting power status logging"
+    log_path = Application.get_env(:logger, :log)[:path]
+    IO.puts "Starting power status logging to #{log_path}"
+    Logger.info "Starting power status logging to #{log_path}"
 
     {:ok, source, percent} = PowerOutage.Status.power_status
     Logger.info "Power source is #{inspect source}. Battery is at #{percent}%"
